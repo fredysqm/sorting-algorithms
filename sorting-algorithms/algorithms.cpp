@@ -1,9 +1,7 @@
-// Algoritmos.cpp : main project file.
-
 #include "stdafx.h"
 #include "fMain.h"
 
-using namespace Algoritmos;
+using namespace algorithms;
 
 [STAThreadAttribute]
 int main(array<System::String ^> ^args)

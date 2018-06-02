@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Algoritmos {
+namespace algorithms {
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
@@ -441,7 +441,6 @@ namespace Algoritmos {
 		}
 	}
 
-
 	void bubleSort(array<int>^arreglo) {
 		int temp;
 
@@ -547,7 +546,6 @@ namespace Algoritmos {
 		}
 	}
 	
-
 	int heapsize;
 
 	void heapSort(array<int>^arr) {
@@ -638,7 +636,6 @@ namespace Algoritmos {
 		}
 	}
 
-	
 	void countingSort(array<int>^ arr) {
 		int max=arr[0];
 		int n=arr->Length;
@@ -690,7 +687,6 @@ namespace Algoritmos {
 		return k;
 	}
 
-
     void quickSort(array<int>^arr, int p,int r) {
 		int q;
 		if(p<r)
@@ -700,7 +696,6 @@ namespace Algoritmos {
 			quickSort(arr,q+1,r);
 		}
 	}
-
 
 	int partition(array<int>^ arr, int p,int r) {
 		int x= arr[p];
@@ -1044,8 +1039,7 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 		dgvResultados->Rows->Add(gcnew array<String^>{"Radix", Stiempo8, System::Convert::ToString(isOrdered)});
 	}
 
-
-	//crear un grafico estadistico
+	//Graf
 	charResultados->Series->Clear();
 	charResultados->Titles->Clear();
 
