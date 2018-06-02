@@ -34,6 +34,7 @@ namespace algorithms {
 
 	protected:
 	private: System::Windows::Forms::CheckBox^  chkRadix;
+	private: System::Windows::Forms::Button^  cmdSaveResults;
 			 int LongitudArray;
 
 		/// <summary>
@@ -100,6 +101,7 @@ namespace algorithms {
 			this->charResultados = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			this->dgvResultados = (gcnew System::Windows::Forms::DataGridView());
 			this->dlgAbrirTest = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->cmdSaveResults = (gcnew System::Windows::Forms::Button());
 			this->fraAlgoritmos->SuspendLayout();
 			this->fraTest->SuspendLayout();
 			this->fraResultados->SuspendLayout();
@@ -246,8 +248,6 @@ namespace algorithms {
 			// fraTest
 			// 
 			this->fraTest->Controls->Add(this->lblCantidad);
-			this->fraTest->Controls->Add(this->rdCadena);
-			this->fraTest->Controls->Add(this->rdEnteros);
 			this->fraTest->Controls->Add(this->cmdAbrirTest);
 			this->fraTest->Location = System::Drawing::Point(12, 12);
 			this->fraTest->Name = L"fraTest";
@@ -267,26 +267,24 @@ namespace algorithms {
 			// rdCadena
 			// 
 			this->rdCadena->AutoSize = true;
-			this->rdCadena->Location = System::Drawing::Point(172, 22);
+			this->rdCadena->Location = System::Drawing::Point(90, 72);
 			this->rdCadena->Name = L"rdCadena";
 			this->rdCadena->Size = System::Drawing::Size(52, 17);
 			this->rdCadena->TabIndex = 8;
 			this->rdCadena->Text = L"String";
 			this->rdCadena->UseVisualStyleBackColor = true;
-			this->rdCadena->Visible = false;
 			// 
 			// rdEnteros
 			// 
 			this->rdEnteros->AutoSize = true;
 			this->rdEnteros->Checked = true;
-			this->rdEnteros->Location = System::Drawing::Point(108, 22);
+			this->rdEnteros->Location = System::Drawing::Point(26, 72);
 			this->rdEnteros->Name = L"rdEnteros";
 			this->rdEnteros->Size = System::Drawing::Size(58, 17);
 			this->rdEnteros->TabIndex = 7;
 			this->rdEnteros->TabStop = true;
 			this->rdEnteros->Text = L"Integer";
 			this->rdEnteros->UseVisualStyleBackColor = true;
-			this->rdEnteros->Visible = false;
 			// 
 			// fraResultados
 			// 
@@ -335,13 +333,26 @@ namespace algorithms {
 			// 
 			this->dlgAbrirTest->Filter = L"Archivos de texto|*.txt";
 			// 
+			// cmdSaveResults
+			// 
+			this->cmdSaveResults->Location = System::Drawing::Point(638, 69);
+			this->cmdSaveResults->Name = L"cmdSaveResults";
+			this->cmdSaveResults->Size = System::Drawing::Size(75, 23);
+			this->cmdSaveResults->TabIndex = 9;
+			this->cmdSaveResults->Text = L"Save results";
+			this->cmdSaveResults->UseVisualStyleBackColor = true;
+			this->cmdSaveResults->Visible = false;
+			// 
 			// fMain
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::ButtonFace;
 			this->ClientSize = System::Drawing::Size(805, 481);
+			this->Controls->Add(this->cmdSaveResults);
 			this->Controls->Add(this->fraResultados);
+			this->Controls->Add(this->rdCadena);
+			this->Controls->Add(this->rdEnteros);
 			this->Controls->Add(this->fraTest);
 			this->Controls->Add(this->fraAlgoritmos);
 			this->Controls->Add(this->cmdOrdenar);
@@ -358,6 +369,7 @@ namespace algorithms {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->charResultados))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgvResultados))->EndInit();
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 #pragma endregion
