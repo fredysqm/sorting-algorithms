@@ -149,6 +149,7 @@ namespace algorithms {
 			this->chkSelection->AutoSize = true;
 			this->chkSelection->Checked = true;
 			this->chkSelection->CheckState = System::Windows::Forms::CheckState::Checked;
+			this->chkSelection->ForeColor = System::Drawing::Color::Red;
 			this->chkSelection->Location = System::Drawing::Point(73, 21);
 			this->chkSelection->Name = L"chkSelection";
 			this->chkSelection->Size = System::Drawing::Size(70, 17);
@@ -209,6 +210,7 @@ namespace algorithms {
 			this->chkBuble->AutoSize = true;
 			this->chkBuble->Checked = true;
 			this->chkBuble->CheckState = System::Windows::Forms::CheckState::Checked;
+			this->chkBuble->ForeColor = System::Drawing::Color::Red;
 			this->chkBuble->Location = System::Drawing::Point(14, 21);
 			this->chkBuble->Name = L"chkBuble";
 			this->chkBuble->Size = System::Drawing::Size(53, 17);
@@ -233,6 +235,7 @@ namespace algorithms {
 			this->chkInsert->AutoSize = true;
 			this->chkInsert->Checked = true;
 			this->chkInsert->CheckState = System::Windows::Forms::CheckState::Checked;
+			this->chkInsert->ForeColor = System::Drawing::Color::Red;
 			this->chkInsert->Location = System::Drawing::Point(149, 21);
 			this->chkInsert->Name = L"chkInsert";
 			this->chkInsert->Size = System::Drawing::Size(52, 17);
@@ -278,7 +281,7 @@ namespace algorithms {
 			this->rdCadena->TabIndex = 8;
 			this->rdCadena->Text = L"String";
 			this->rdCadena->UseVisualStyleBackColor = true;
-			this->rdCadena->Visible = false;
+			this->rdCadena->CheckedChanged += gcnew System::EventHandler(this, &fMain::rdCadena_CheckedChanged);
 			// 
 			// rdEnteros
 			// 
@@ -291,7 +294,7 @@ namespace algorithms {
 			this->rdEnteros->TabStop = true;
 			this->rdEnteros->Text = L"Integer";
 			this->rdEnteros->UseVisualStyleBackColor = true;
-			this->rdEnteros->Visible = false;
+			this->rdEnteros->CheckedChanged += gcnew System::EventHandler(this, &fMain::rdEnteros_CheckedChanged);
 			// 
 			// fraResultados
 			// 
@@ -843,15 +846,21 @@ private: System::Void cmdAbrirTest_Click(System::Object^  sender, System::EventA
 			StreamReader ^reader = gcnew StreamReader(dlgAbrirTest->FileName);
 
 			this->LongitudArray = System::Convert::ToInt32(reader->ReadLine());
-			this->ArrayIntegerUnsort = gcnew array<int>(LongitudArray);
-			this->ArrayIntegerSort = gcnew array<int>(LongitudArray);
+
+			if (rdEnteros->Checked) {
+				this->ArrayIntegerUnsort = gcnew array<int>(LongitudArray);
+				this->ArrayIntegerSort = gcnew array<int>(LongitudArray);
+			}
 
 			this->cmdSaveResults->Visible = false;
 			this->charResultados->Visible = false;
 
-			for (int i = 0; i < this->LongitudArray; i++) {
-				this->ArrayIntegerUnsort[i] = System::Convert::ToInt32(reader->ReadLine());
+			if (rdEnteros->Checked) {
+				for (int i = 0; i < this->LongitudArray; i++) {
+					this->ArrayIntegerUnsort[i] = System::Convert::ToInt32(reader->ReadLine());
+				}
 			}
+
 			lblCantidad->Text = "Count: " + this->LongitudArray + " Rows";
 			
 		}
@@ -902,59 +911,83 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 	Stiempo1 = "ns", Stiempo2 = "ns", Stiempo3 = "ns", Stiempo4 = "ns", Stiempo5 = "ns", Stiempo6 = "ns", Stiempo7 = "ns"; Stiempo8 = "ns";
 	frequency = Stopwatch::Frequency;
 
-	if (chkBuble->Checked == true)
+	if (chkBuble->Checked == true && chkBuble->Visible == true)
 	{
+		bool isOrdered;
 		array<int>^ arreglo = gcnew array<int>(this->LongitudArray);
 
-		for (int i = 0; i < this->LongitudArray; i++) {
-			arreglo[i] = this->ArrayIntegerUnsort[i];
+
+		if (rdEnteros->Checked) {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				arreglo[i] = this->ArrayIntegerUnsort[i];
+			}
 		}
 
 		tiempo3 = 0;
 
 		Tproceso = Stopwatch::StartNew();
-		bubleSort(arreglo);
+
+		if (rdEnteros->Checked) {
+			bubleSort(arreglo);
+		}
+
 		Tproceso->Stop();
 		ticks = System::Convert::ToDouble(Tproceso->ElapsedTicks);
 		tiempo3 = (ticks / frequency) * 1000;
 		tiempo3 = Math::Round(tiempo3, 2);
 		Stiempo3 = System::Convert::ToString(tiempo3);
 
+		if (rdEnteros->Checked) {
+			isOrdered = estaOrdenado(arreglo);
+		}
 
-		bool isOrdered = estaOrdenado(arreglo);
 		dgvResultados->Rows->Add( gcnew array<String^>{"Bubble", Stiempo3, System::Convert::ToString(isOrdered)} );
 
-		for (int i = 0; i < this->LongitudArray; i++) {
-			this->ArrayIntegerSort[i] = arreglo[i];
+		if (rdEnteros->Checked) {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				this->ArrayIntegerSort[i] = arreglo[i];
+			}
 		}
 	}
 
-	if (chkInsert->Checked == true)
+	if (chkInsert->Checked == true && chkInsert->Visible == true)
 	{
+		bool isOrdered;
 		array<int>^ arreglo = gcnew array<int>(this->LongitudArray);
 
-		for (int i = 0; i < this->LongitudArray; i++) {
-			arreglo[i] = this->ArrayIntegerUnsort[i];
+		if (rdEnteros->Checked) {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				arreglo[i] = this->ArrayIntegerUnsort[i];
+			}
 		}
 
 		tiempo1 = 0;
 		Tproceso = Stopwatch::StartNew();
-		insertSort(arreglo);
+
+		if (rdEnteros->Checked) {
+			insertSort(arreglo);
+		}
+
 		Tproceso->Stop();
 		ticks = System::Convert::ToDouble(Tproceso->ElapsedTicks);
 		tiempo1 = (ticks / frequency) * 1000;
 		tiempo1 = Math::Round(tiempo1, 2);
 		Stiempo1 = System::Convert::ToString(tiempo1);
 
-		bool isOrdered = estaOrdenado(arreglo);
+		if (rdEnteros->Checked) {
+			isOrdered = estaOrdenado(arreglo);
+		}
+
 		dgvResultados->Rows->Add(gcnew array<String^>{"Insert", Stiempo1, System::Convert::ToString(isOrdered)});
 
-		for (int i = 0; i < this->LongitudArray; i++) {
-			this->ArrayIntegerSort[i] = arreglo[i];
+		if (rdEnteros->Checked) {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				this->ArrayIntegerSort[i] = arreglo[i];
+			}
 		}
 	}
 
-	if (chkSelection->Checked == true)
+	if (chkSelection->Checked == true && chkSelection->Visible == true)
 	{
 		array<int>^ arreglo = gcnew array<int>(this->LongitudArray);
 
@@ -979,66 +1012,95 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 		}
 	}
 
-	if (chkShell->Checked == true)
+	if (chkShell->Checked == true && chkShell->Visible == true)
 	{
+		bool isOrdered;
 		array<int>^ arreglo = gcnew array<int>(this->LongitudArray);
 
-		for (int i = 0; i < this->LongitudArray; i++) {
-			arreglo[i] = this->ArrayIntegerUnsort[i];
+		if (rdEnteros->Checked) {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				arreglo[i] = this->ArrayIntegerUnsort[i];
+			}
 		}
 
 		tiempo2 = 0;
 		Tproceso = Stopwatch::StartNew();
-		shellSort(arreglo);
+
+		if (rdEnteros->Checked) {
+			shellSort(arreglo);
+		}
+
 		Tproceso->Stop();
 		ticks = System::Convert::ToDouble(Tproceso->ElapsedTicks);
 		tiempo2 = (ticks / frequency) * 1000;
 		tiempo2 = Math::Round(tiempo2, 2);
 		Stiempo2 = System::Convert::ToString(tiempo2);
 
-		bool isOrdered = estaOrdenado(arreglo);
+		if (rdEnteros->Checked) {
+			isOrdered = estaOrdenado(arreglo);
+		}
 		dgvResultados->Rows->Add(gcnew array<String^>{"Shell", Stiempo2, System::Convert::ToString(isOrdered)});
 
-		for (int i = 0; i < this->LongitudArray; i++) {
-			this->ArrayIntegerSort[i] = arreglo[i];
+		if (rdEnteros->Checked) {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				this->ArrayIntegerSort[i] = arreglo[i];
+			}
 		}
 	}
 
-	if (chkMerge->Checked == true)
+	if (chkMerge->Checked == true && chkMerge->Visible == true)
 	{
+		bool isOrdered;
 		array<int>^ arreglo = gcnew array<int>(this->LongitudArray);
 
-		for (int i = 0; i < this->LongitudArray; i++) {
-			arreglo[i] = this->ArrayIntegerUnsort[i];
+		if (rdEnteros->Checked) {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				arreglo[i] = this->ArrayIntegerUnsort[i];
+			}
 		}
 
 		tiempo4 = 0;
 		Tproceso = Stopwatch::StartNew();
-		mergeSort(arreglo, 0, arreglo->Length - 1);
+
+		if (rdEnteros->Checked) {
+			mergeSort(arreglo, 0, arreglo->Length - 1);
+		}
+
 		Tproceso->Stop();
 		ticks = System::Convert::ToDouble(Tproceso->ElapsedTicks);
 		tiempo4 = (ticks / frequency) * 1000;
 		tiempo4 = Math::Round(tiempo4, 2);
 		Stiempo4 = System::Convert::ToString(tiempo4);
 
-		bool isOrdered = estaOrdenado(arreglo);
+		if (rdEnteros->Checked) {
+			isOrdered = estaOrdenado(arreglo);
+		}
+
 		dgvResultados->Rows->Add(gcnew array<String^>{"Merge", Stiempo4, System::Convert::ToString(isOrdered)});
 
-		for (int i = 0; i < this->LongitudArray; i++) {
-			this->ArrayIntegerSort[i] = arreglo[i];
+		if (rdEnteros->Checked) {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				this->ArrayIntegerSort[i] = arreglo[i];
+			}
 		}
 	}
-	if (chkQuick->Checked == true)
+	if (chkQuick->Checked == true && chkQuick->Visible == true)
 	{
+		bool isOrdered;
 		array<int>^ arreglo = gcnew array<int>(this->LongitudArray);
 
-		for (int i = 0; i < this->LongitudArray; i++) {
-			arreglo[i] = this->ArrayIntegerUnsort[i];
+		if (rdEnteros->Checked) {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				arreglo[i] = this->ArrayIntegerUnsort[i];
+			}
 		}
 
 		tiempo5 = 0;
 		Tproceso = Stopwatch::StartNew();
-		quickSort(arreglo, 0, arreglo->Length - 1);
+
+		if (rdEnteros->Checked) {
+			quickSort(arreglo, 0, arreglo->Length - 1);
+		}
 
 		Tproceso->Stop();
 		ticks = System::Convert::ToDouble(Tproceso->ElapsedTicks);
@@ -1046,61 +1108,90 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 		tiempo5 = Math::Round(tiempo5, 2);
 		Stiempo5 = System::Convert::ToString(tiempo5);
 
-		bool isOrdered = estaOrdenado(arreglo);
+		if (rdEnteros->Checked) {
+			isOrdered = estaOrdenado(arreglo);
+		}
+
 		dgvResultados->Rows->Add(gcnew array<String^>{"Quick", Stiempo5, System::Convert::ToString(isOrdered)});
 
-		for (int i = 0; i < this->LongitudArray; i++) {
-			this->ArrayIntegerSort[i] = arreglo[i];
+		if (rdEnteros->Checked) {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				this->ArrayIntegerSort[i] = arreglo[i];
+			}
 		}
 	}
 
-	if (chkHeap->Checked == true)
+	if (chkHeap->Checked == true && chkHeap->Visible == true)
 	{
+		bool isOrdered;
 		array<int>^ arreglo = gcnew array<int>(this->LongitudArray);
 
-		for (int i = 0; i < this->LongitudArray; i++) {
-			arreglo[i] = this->ArrayIntegerUnsort[i];
+		if (rdEnteros->Checked) {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				arreglo[i] = this->ArrayIntegerUnsort[i];
+			}
 		}
 
 		tiempo6 = 0;
 		Tproceso = Stopwatch::StartNew();
-		heapSort(arreglo);
+		
+		if (rdEnteros->Checked) {
+			heapSort(arreglo);
+		}
+
 		Tproceso->Stop();
 		ticks = System::Convert::ToDouble(Tproceso->ElapsedTicks);
 		tiempo6 = (ticks / frequency) * 1000;
 		tiempo6 = Math::Round(tiempo6, 2);
 		Stiempo6 = System::Convert::ToString(tiempo6);
 
-		bool isOrdered = estaOrdenado(arreglo);
+		if (rdEnteros->Checked) {
+			isOrdered = estaOrdenado(arreglo);
+		}
+
 		dgvResultados->Rows->Add(gcnew array<String^>{"Heap", Stiempo6, System::Convert::ToString(isOrdered)});
 
-		for (int i = 0; i < this->LongitudArray; i++) {
-			this->ArrayIntegerSort[i] = arreglo[i];
+		if (rdEnteros->Checked) {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				this->ArrayIntegerSort[i] = arreglo[i];
+			}
 		}
 	}
 
-	if (chkRadix->Checked == true)
+	if (chkRadix->Checked == true && chkRadix->Visible == true)
 	{
+		bool isOrdered;
 		array<int>^ arreglo = gcnew array<int>(this->LongitudArray);
 
-		for (int i = 0; i < this->LongitudArray; i++) {
-			arreglo[i] = this->ArrayIntegerUnsort[i];
+		if (rdEnteros->Checked) {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				arreglo[i] = this->ArrayIntegerUnsort[i];
+			}
 		}
 
 		tiempo8 = 0;
 		Tproceso = Stopwatch::StartNew();
-		radixSort(arreglo, arreglo->Length);
+
+		if (rdEnteros->Checked) {
+			radixSort(arreglo, arreglo->Length);
+		}
+
 		Tproceso->Stop();
 		ticks = System::Convert::ToDouble(Tproceso->ElapsedTicks);
 		tiempo8 = (ticks / frequency) * 1000;
 		tiempo8 = Math::Round(tiempo8, 2);
 		Stiempo8 = System::Convert::ToString(tiempo8);
 
-		bool isOrdered = estaOrdenado(arreglo);
+		if (rdEnteros->Checked) {
+			isOrdered = estaOrdenado(arreglo);
+		}
+
 		dgvResultados->Rows->Add(gcnew array<String^>{"Radix", Stiempo8, System::Convert::ToString(isOrdered)});
 
-		for (int i = 0; i < this->LongitudArray; i++) {
-			this->ArrayIntegerSort[i] = arreglo[i];
+		if (rdEnteros->Checked) {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				this->ArrayIntegerSort[i] = arreglo[i];
+			}
 		}
 	}
 
@@ -1159,6 +1250,32 @@ private: System::Void cmdSaveResults_Click(System::Object^  sender, System::Even
 
 		this->Cursor = System::Windows::Forms::Cursors::Default;
 		this->Enabled = true;
+	}
+}
+
+private: System::Void rdEnteros_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
+	if(this->rdEnteros->Checked) {
+		chkBuble->Visible = true;
+		chkHeap->Visible = true;
+		chkInsert->Visible = true;
+		chkMerge->Visible = true;
+		chkQuick->Visible = true;
+		chkRadix->Visible = true;
+		chkSelection->Visible = true;
+		chkShell->Visible = true;
+	}
+}
+
+private: System::Void rdCadena_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
+	if (this->rdCadena->Checked) {
+		chkBuble->Visible = true;
+		chkHeap->Visible = true;
+		chkInsert->Visible = true;
+		chkMerge->Visible = true;
+		chkQuick->Visible = true;
+		chkRadix->Visible = false;
+		chkSelection->Visible = false;
+		chkShell->Visible = true;
 	}
 }
 
