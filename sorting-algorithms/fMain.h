@@ -403,6 +403,16 @@ namespace algorithms {
 		return true;
 	}
 
+	bool estaOrdenadoS(array<String^>^ arr) {
+		for (int i = 0; i < (arr->Length) - 1; i++) {
+			if (arr[i]->CompareTo(arr[i + 1])> 0) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	void insertSort(array<int>^arreglo) {
 		int i;
 
@@ -850,6 +860,9 @@ private: System::Void cmdAbrirTest_Click(System::Object^  sender, System::EventA
 			if (rdEnteros->Checked) {
 				this->ArrayIntegerUnsort = gcnew array<int>(LongitudArray);
 				this->ArrayIntegerSort = gcnew array<int>(LongitudArray);
+			} else {
+				this->ArrayStringUnsort = gcnew array<String^>(LongitudArray);
+				this->ArrayStringSort = gcnew array<String^>(LongitudArray);
 			}
 
 			this->cmdSaveResults->Visible = false;
@@ -859,11 +872,13 @@ private: System::Void cmdAbrirTest_Click(System::Object^  sender, System::EventA
 				for (int i = 0; i < this->LongitudArray; i++) {
 					this->ArrayIntegerUnsort[i] = System::Convert::ToInt32(reader->ReadLine());
 				}
+			} else {
+				for (int i = 0; i < this->LongitudArray; i++) {
+					this->ArrayStringUnsort[i] = reader->ReadLine();
+				}
 			}
 
-			lblCantidad->Text = "Count: " + this->LongitudArray + " Rows";
-			
-		}
+			lblCantidad->Text = "Count: " + this->LongitudArray + " Rows";		}
 		catch (System::Exception ^e) {
 		}
 
@@ -915,11 +930,16 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 	{
 		bool isOrdered;
 		array<int>^ arreglo = gcnew array<int>(this->LongitudArray);
-
+		array<String^>^ arregloS = gcnew array<String^>(this->LongitudArray);
 
 		if (rdEnteros->Checked) {
 			for (int i = 0; i < this->LongitudArray; i++) {
 				arreglo[i] = this->ArrayIntegerUnsort[i];
+			}
+		}
+		else {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				arregloS[i] = this->ArrayStringUnsort[i];
 			}
 		}
 
@@ -929,6 +949,10 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 
 		if (rdEnteros->Checked) {
 			bubleSort(arreglo);
+		}
+		else
+		{
+			bubleSortText(arregloS);
 		}
 
 		Tproceso->Stop();
@@ -940,6 +964,9 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 		if (rdEnteros->Checked) {
 			isOrdered = estaOrdenado(arreglo);
 		}
+		else {
+			isOrdered = estaOrdenadoS(arregloS);
+		}
 
 		dgvResultados->Rows->Add( gcnew array<String^>{"Bubble", Stiempo3, System::Convert::ToString(isOrdered)} );
 
@@ -948,16 +975,26 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 				this->ArrayIntegerSort[i] = arreglo[i];
 			}
 		}
+		else {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				this->ArrayStringSort[i] = arregloS[i];
+			}
+		}
 	}
 
 	if (chkInsert->Checked == true && chkInsert->Visible == true)
 	{
 		bool isOrdered;
 		array<int>^ arreglo = gcnew array<int>(this->LongitudArray);
+		array<String^>^ arregloS = gcnew array<String^>(this->LongitudArray);
 
 		if (rdEnteros->Checked) {
 			for (int i = 0; i < this->LongitudArray; i++) {
 				arreglo[i] = this->ArrayIntegerUnsort[i];
+			}
+		} else {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				arregloS[i] = this->ArrayStringUnsort[i];
 			}
 		}
 
@@ -966,6 +1003,8 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 
 		if (rdEnteros->Checked) {
 			insertSort(arreglo);
+		} else {
+			insertSortText(arregloS);
 		}
 
 		Tproceso->Stop();
@@ -976,6 +1015,8 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 
 		if (rdEnteros->Checked) {
 			isOrdered = estaOrdenado(arreglo);
+		} else {
+			isOrdered = estaOrdenadoS(arregloS);
 		}
 
 		dgvResultados->Rows->Add(gcnew array<String^>{"Insert", Stiempo1, System::Convert::ToString(isOrdered)});
@@ -983,6 +1024,10 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 		if (rdEnteros->Checked) {
 			for (int i = 0; i < this->LongitudArray; i++) {
 				this->ArrayIntegerSort[i] = arreglo[i];
+			}
+		} else {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				this->ArrayStringSort[i] = arregloS[i];
 			}
 		}
 	}
@@ -1016,10 +1061,16 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 	{
 		bool isOrdered;
 		array<int>^ arreglo = gcnew array<int>(this->LongitudArray);
+		array<String^>^ arregloS = gcnew array<String^>(this->LongitudArray);
 
 		if (rdEnteros->Checked) {
 			for (int i = 0; i < this->LongitudArray; i++) {
 				arreglo[i] = this->ArrayIntegerUnsort[i];
+			}
+		}
+		else {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				arregloS[i] = this->ArrayStringUnsort[i];
 			}
 		}
 
@@ -1028,6 +1079,10 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 
 		if (rdEnteros->Checked) {
 			shellSort(arreglo);
+		}
+		else
+		{
+			shellSortText(arregloS);
 		}
 
 		Tproceso->Stop();
@@ -1039,11 +1094,22 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 		if (rdEnteros->Checked) {
 			isOrdered = estaOrdenado(arreglo);
 		}
+		else
+		{
+			isOrdered = estaOrdenadoS(arregloS);
+		}
+
 		dgvResultados->Rows->Add(gcnew array<String^>{"Shell", Stiempo2, System::Convert::ToString(isOrdered)});
 
 		if (rdEnteros->Checked) {
 			for (int i = 0; i < this->LongitudArray; i++) {
 				this->ArrayIntegerSort[i] = arreglo[i];
+			}
+		}
+		else
+		{
+			for (int i = 0; i < this->LongitudArray; i++) {
+				this->ArrayStringSort[i] = arregloS[i];
 			}
 		}
 	}
@@ -1052,10 +1118,17 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 	{
 		bool isOrdered;
 		array<int>^ arreglo = gcnew array<int>(this->LongitudArray);
+		array<String^>^ arregloS = gcnew array<String^>(this->LongitudArray);
 
 		if (rdEnteros->Checked) {
 			for (int i = 0; i < this->LongitudArray; i++) {
 				arreglo[i] = this->ArrayIntegerUnsort[i];
+			}
+		}
+		else
+		{
+			for (int i = 0; i < this->LongitudArray; i++) {
+				arregloS[i] = this->ArrayStringUnsort[i];
 			}
 		}
 
@@ -1064,6 +1137,10 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 
 		if (rdEnteros->Checked) {
 			mergeSort(arreglo, 0, arreglo->Length - 1);
+		}
+		else
+		{
+			merge_sorText(arregloS, 0, arregloS->Length - 1);
 		}
 
 		Tproceso->Stop();
@@ -1075,6 +1152,10 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 		if (rdEnteros->Checked) {
 			isOrdered = estaOrdenado(arreglo);
 		}
+		else
+		{
+			isOrdered = estaOrdenadoS(arregloS);
+		}
 
 		dgvResultados->Rows->Add(gcnew array<String^>{"Merge", Stiempo4, System::Convert::ToString(isOrdered)});
 
@@ -1083,15 +1164,26 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 				this->ArrayIntegerSort[i] = arreglo[i];
 			}
 		}
+		else {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				this->ArrayStringSort[i] = arregloS[i];
+			}
+		}
 	}
 	if (chkQuick->Checked == true && chkQuick->Visible == true)
 	{
 		bool isOrdered;
 		array<int>^ arreglo = gcnew array<int>(this->LongitudArray);
+		array<String^>^ arregloS = gcnew array<String^>(this->LongitudArray);
 
 		if (rdEnteros->Checked) {
 			for (int i = 0; i < this->LongitudArray; i++) {
 				arreglo[i] = this->ArrayIntegerUnsort[i];
+			}
+		}
+		else {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				arregloS[i] = this->ArrayStringUnsort[i];
 			}
 		}
 
@@ -1100,6 +1192,10 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 
 		if (rdEnteros->Checked) {
 			quickSort(arreglo, 0, arreglo->Length - 1);
+		}
+		else
+		{
+			quickSortText(arregloS, 0, arreglo->Length - 1);
 		}
 
 		Tproceso->Stop();
@@ -1111,6 +1207,10 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 		if (rdEnteros->Checked) {
 			isOrdered = estaOrdenado(arreglo);
 		}
+		else
+		{
+			isOrdered = estaOrdenadoS(arregloS);
+		}
 
 		dgvResultados->Rows->Add(gcnew array<String^>{"Quick", Stiempo5, System::Convert::ToString(isOrdered)});
 
@@ -1119,16 +1219,28 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 				this->ArrayIntegerSort[i] = arreglo[i];
 			}
 		}
+		else {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				this->ArrayStringSort[i] = arregloS[i];
+			}
+		}
 	}
 
 	if (chkHeap->Checked == true && chkHeap->Visible == true)
 	{
 		bool isOrdered;
 		array<int>^ arreglo = gcnew array<int>(this->LongitudArray);
+		array<String^>^ arregloS = gcnew array<String^>(this->LongitudArray);
 
 		if (rdEnteros->Checked) {
 			for (int i = 0; i < this->LongitudArray; i++) {
 				arreglo[i] = this->ArrayIntegerUnsort[i];
+			}
+		}
+		else
+		{
+			for (int i = 0; i < this->LongitudArray; i++) {
+				arregloS[i] = this->ArrayStringUnsort[i];
 			}
 		}
 
@@ -1137,6 +1249,10 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 		
 		if (rdEnteros->Checked) {
 			heapSort(arreglo);
+		}
+		else
+		{
+			heapSortText(arregloS);
 		}
 
 		Tproceso->Stop();
@@ -1148,12 +1264,20 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 		if (rdEnteros->Checked) {
 			isOrdered = estaOrdenado(arreglo);
 		}
+		else {
+			isOrdered = estaOrdenadoS(arregloS);
+		}
 
 		dgvResultados->Rows->Add(gcnew array<String^>{"Heap", Stiempo6, System::Convert::ToString(isOrdered)});
 
 		if (rdEnteros->Checked) {
 			for (int i = 0; i < this->LongitudArray; i++) {
 				this->ArrayIntegerSort[i] = arreglo[i];
+			}
+		}
+		else {
+			for (int i = 0; i < this->LongitudArray; i++) {
+				this->ArrayStringSort[i] = arregloS[i];
 			}
 		}
 	}
@@ -1238,10 +1362,18 @@ private: System::Void cmdSaveResults_Click(System::Object^  sender, System::Even
 			int cont = 0;
 
 			StreamWriter^ Writer = gcnew StreamWriter(dlgGuardarResultados->FileName);
-			for (int i = 0; i < this->LongitudArray; i++)
-			{
-				Writer->WriteLine(this->ArrayIntegerSort[i]);
+
+			if (rdEnteros->Checked) {
+				for (int i = 0; i < this->LongitudArray; i++) {
+					Writer->WriteLine(this->ArrayIntegerSort[i]);
+				}
 			}
+			else {
+				for (int i = 0; i < this->LongitudArray; i++) {
+					Writer->WriteLine(this->ArrayStringSort[i]);
+				}
+			}
+
 			Writer->Flush();
 			Writer->Close();
 		} catch (System::Exception ^e) {
@@ -1254,6 +1386,12 @@ private: System::Void cmdSaveResults_Click(System::Object^  sender, System::Even
 }
 
 private: System::Void rdEnteros_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
+	this->charResultados->Visible = false;
+	this->dgvResultados->Rows->Clear();
+	cmdSaveResults->Visible = false;
+	lblCantidad->Text = "";
+	this->LongitudArray = 0;
+
 	if(this->rdEnteros->Checked) {
 		chkBuble->Visible = true;
 		chkHeap->Visible = true;
@@ -1267,6 +1405,12 @@ private: System::Void rdEnteros_CheckedChanged(System::Object^  sender, System::
 }
 
 private: System::Void rdCadena_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
+	this->charResultados->Visible = false;
+	this->dgvResultados->Rows->Clear();
+	cmdSaveResults->Visible = false;
+	lblCantidad->Text = "";
+	this->LongitudArray = 0;
+
 	if (this->rdCadena->Checked) {
 		chkBuble->Visible = true;
 		chkHeap->Visible = true;
