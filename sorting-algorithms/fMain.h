@@ -29,12 +29,16 @@ namespace algorithms {
 
 		array<int>^ ArrayIntegerUnsort;
 		array<String^>^ ArrayStringUnsort;
+		array<int>^ ArrayIntegerSort;
+		array<String^>^ ArrayStringSort;
+
 	private: System::Windows::Forms::CheckBox^  chkSelection;
 	protected:
 
 	protected:
 	private: System::Windows::Forms::CheckBox^  chkRadix;
 	private: System::Windows::Forms::Button^  cmdSaveResults;
+	private: System::Windows::Forms::SaveFileDialog^  dlgGuardarResultados;
 			 int LongitudArray;
 
 		/// <summary>
@@ -102,6 +106,7 @@ namespace algorithms {
 			this->dgvResultados = (gcnew System::Windows::Forms::DataGridView());
 			this->dlgAbrirTest = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->cmdSaveResults = (gcnew System::Windows::Forms::Button());
+			this->dlgGuardarResultados = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->fraAlgoritmos->SuspendLayout();
 			this->fraTest->SuspendLayout();
 			this->fraResultados->SuspendLayout();
@@ -273,6 +278,7 @@ namespace algorithms {
 			this->rdCadena->TabIndex = 8;
 			this->rdCadena->Text = L"String";
 			this->rdCadena->UseVisualStyleBackColor = true;
+			this->rdCadena->Visible = false;
 			// 
 			// rdEnteros
 			// 
@@ -285,6 +291,7 @@ namespace algorithms {
 			this->rdEnteros->TabStop = true;
 			this->rdEnteros->Text = L"Integer";
 			this->rdEnteros->UseVisualStyleBackColor = true;
+			this->rdEnteros->Visible = false;
 			// 
 			// fraResultados
 			// 
@@ -318,6 +325,7 @@ namespace algorithms {
 			this->charResultados->Size = System::Drawing::Size(530, 346);
 			this->charResultados->TabIndex = 1;
 			this->charResultados->Text = L"Grafico";
+			this->charResultados->Visible = false;
 			// 
 			// dgvResultados
 			// 
@@ -342,6 +350,12 @@ namespace algorithms {
 			this->cmdSaveResults->Text = L"Save results";
 			this->cmdSaveResults->UseVisualStyleBackColor = true;
 			this->cmdSaveResults->Visible = false;
+			this->cmdSaveResults->Click += gcnew System::EventHandler(this, &fMain::cmdSaveResults_Click);
+			// 
+			// dlgGuardarResultados
+			// 
+			this->dlgGuardarResultados->Filter = L"Archivos de texto|*.txt";
+			this->dlgGuardarResultados->Title = L"Sorting algorithms";
 			// 
 			// fMain
 			// 
@@ -820,9 +834,9 @@ namespace algorithms {
 #pragma endregion
 
 private: System::Void cmdAbrirTest_Click(System::Object^  sender, System::EventArgs^  e) {
-
 	if (dlgAbrirTest->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 
+		this->Enabled = false;
 		this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
 
 		try {
@@ -830,7 +844,11 @@ private: System::Void cmdAbrirTest_Click(System::Object^  sender, System::EventA
 
 			this->LongitudArray = System::Convert::ToInt32(reader->ReadLine());
 			this->ArrayIntegerUnsort = gcnew array<int>(LongitudArray);
-				
+			this->ArrayIntegerSort = gcnew array<int>(LongitudArray);
+
+			this->cmdSaveResults->Visible = false;
+			this->charResultados->Visible = false;
+
 			for (int i = 0; i < this->LongitudArray; i++) {
 				this->ArrayIntegerUnsort[i] = System::Convert::ToInt32(reader->ReadLine());
 			}
@@ -841,14 +859,15 @@ private: System::Void cmdAbrirTest_Click(System::Object^  sender, System::EventA
 		}
 
 		dgvResultados->Rows->Clear();
-		//charResultados->Hide();
 
 		this->Cursor = System::Windows::Forms::Cursors::Default;
+		this->Enabled = true;
 	}
 }
 
 private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventArgs^  e) {
 
+	this->Enabled = false;
 	this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
 
 	dgvResultados->ColumnCount = 3;
@@ -898,11 +917,16 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 		Tproceso->Stop();
 		ticks = System::Convert::ToDouble(Tproceso->ElapsedTicks);
 		tiempo3 = (ticks / frequency) * 1000;
+		tiempo3 = Math::Round(tiempo3, 2);
 		Stiempo3 = System::Convert::ToString(tiempo3);
 
 
 		bool isOrdered = estaOrdenado(arreglo);
 		dgvResultados->Rows->Add( gcnew array<String^>{"Bubble", Stiempo3, System::Convert::ToString(isOrdered)} );
+
+		for (int i = 0; i < this->LongitudArray; i++) {
+			this->ArrayIntegerSort[i] = arreglo[i];
+		}
 	}
 
 	if (chkInsert->Checked == true)
@@ -924,6 +948,10 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 
 		bool isOrdered = estaOrdenado(arreglo);
 		dgvResultados->Rows->Add(gcnew array<String^>{"Insert", Stiempo1, System::Convert::ToString(isOrdered)});
+
+		for (int i = 0; i < this->LongitudArray; i++) {
+			this->ArrayIntegerSort[i] = arreglo[i];
+		}
 	}
 
 	if (chkSelection->Checked == true)
@@ -945,6 +973,10 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 
 		bool isOrdered = estaOrdenado(arreglo);
 		dgvResultados->Rows->Add(gcnew array<String^>{"Selection", Stiempo7, System::Convert::ToString(isOrdered)});
+
+		for (int i = 0; i < this->LongitudArray; i++) {
+			this->ArrayIntegerSort[i] = arreglo[i];
+		}
 	}
 
 	if (chkShell->Checked == true)
@@ -966,6 +998,10 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 
 		bool isOrdered = estaOrdenado(arreglo);
 		dgvResultados->Rows->Add(gcnew array<String^>{"Shell", Stiempo2, System::Convert::ToString(isOrdered)});
+
+		for (int i = 0; i < this->LongitudArray; i++) {
+			this->ArrayIntegerSort[i] = arreglo[i];
+		}
 	}
 
 	if (chkMerge->Checked == true)
@@ -982,10 +1018,15 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 		Tproceso->Stop();
 		ticks = System::Convert::ToDouble(Tproceso->ElapsedTicks);
 		tiempo4 = (ticks / frequency) * 1000;
+		tiempo4 = Math::Round(tiempo4, 2);
 		Stiempo4 = System::Convert::ToString(tiempo4);
 
 		bool isOrdered = estaOrdenado(arreglo);
 		dgvResultados->Rows->Add(gcnew array<String^>{"Merge", Stiempo4, System::Convert::ToString(isOrdered)});
+
+		for (int i = 0; i < this->LongitudArray; i++) {
+			this->ArrayIntegerSort[i] = arreglo[i];
+		}
 	}
 	if (chkQuick->Checked == true)
 	{
@@ -1006,7 +1047,11 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 		Stiempo5 = System::Convert::ToString(tiempo5);
 
 		bool isOrdered = estaOrdenado(arreglo);
-		dgvResultados->Rows->Add("Quick", Stiempo5, System::Convert::ToString(isOrdered));
+		dgvResultados->Rows->Add(gcnew array<String^>{"Quick", Stiempo5, System::Convert::ToString(isOrdered)});
+
+		for (int i = 0; i < this->LongitudArray; i++) {
+			this->ArrayIntegerSort[i] = arreglo[i];
+		}
 	}
 
 	if (chkHeap->Checked == true)
@@ -1028,6 +1073,10 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 
 		bool isOrdered = estaOrdenado(arreglo);
 		dgvResultados->Rows->Add(gcnew array<String^>{"Heap", Stiempo6, System::Convert::ToString(isOrdered)});
+
+		for (int i = 0; i < this->LongitudArray; i++) {
+			this->ArrayIntegerSort[i] = arreglo[i];
+		}
 	}
 
 	if (chkRadix->Checked == true)
@@ -1049,11 +1098,18 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 
 		bool isOrdered = estaOrdenado(arreglo);
 		dgvResultados->Rows->Add(gcnew array<String^>{"Radix", Stiempo8, System::Convert::ToString(isOrdered)});
+
+		for (int i = 0; i < this->LongitudArray; i++) {
+			this->ArrayIntegerSort[i] = arreglo[i];
+		}
 	}
+
+	this->cmdSaveResults->Visible = true;
 
 	//Graf
 	charResultados->Series->Clear();
 	charResultados->Titles->Clear();
+	this->charResultados->Visible = true;
 
 	array<String^>^series = gcnew array<String^>{"Insert", "Shell", "Buble", "Merge", "Quicksort", "Heap", "Selection", "Radix"};
 	array<double>^ puntos = gcnew array<double>{tiempo1, tiempo2, tiempo3, tiempo4, tiempo5, tiempo6, tiempo7, tiempo8};
@@ -1076,8 +1132,35 @@ private: System::Void cmdOrdenar_Click(System::Object^  senrOder, System::EventA
 	charResultados->Titles->Add("Tiempos");
 
 	this->Cursor = System::Windows::Forms::Cursors::Default;
+	this->Enabled = true;
 }
 
+
+private: System::Void cmdSaveResults_Click(System::Object^  sender, System::EventArgs^  e) {
+	
+	if (dlgGuardarResultados->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+
+		this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
+		this->Enabled = false;
+
+		try {
+			int cont = 0;
+
+			StreamWriter^ Writer = gcnew StreamWriter(dlgGuardarResultados->FileName);
+			for (int i = 0; i < this->LongitudArray; i++)
+			{
+				Writer->WriteLine(this->ArrayIntegerSort[i]);
+			}
+			Writer->Flush();
+			Writer->Close();
+		} catch (System::Exception ^e) {
+			//
+		}
+
+		this->Cursor = System::Windows::Forms::Cursors::Default;
+		this->Enabled = true;
+	}
+}
 
 };
 }
