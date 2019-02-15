@@ -1,1 +1,2 @@
-# sorting algorithms #
+# sorting algorithms
+Algoritmos de ordenamiento.
